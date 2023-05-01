@@ -10,8 +10,12 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundBroadcastService;
 import com.prashant.backgroundcallername.Database.DatabaseHelper;
+import com.prashant.backgroundcallername.Models.Call_Model;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +23,7 @@ import java.util.Date;
 
 public class IncomingCall extends BroadcastReceiver {
 
+DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("vishal");
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint({"UnsafeProtectedBroadcastReceiver", "SuspiciousIndentation"})
@@ -40,12 +45,21 @@ public class IncomingCall extends BroadcastReceiver {
 
             DatabaseHelper db = new DatabaseHelper(context);
             Date currentTime = Calendar.getInstance().getTime();
+            String date = String.valueOf(currentTime);
 
 
             if(state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
                 if (incomingNumber!=null){
+                    Call_Model model = new Call_Model("Incomming", incomingNumber, date);
+                    String key = reference.push().getKey();
                     Toast.makeText(context,"Call Aa raha hai Number : "+incomingNumber,Toast.LENGTH_SHORT).show();
-                    db.addCallDetails(state, incomingNumber, String.valueOf(currentTime));
+                    reference.child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(context, "Data Added", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+//                    db.addCallDetails(state, incomingNumber, String.valueOf(currentTime));
                 }
 
 

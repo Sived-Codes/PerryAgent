@@ -23,7 +23,6 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundBroadcastService;
-import com.prashant.backgroundcallername.BackgroundServices.ReStarter;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundService;
 import com.prashant.backgroundcallername.Fragments.CallFragment;
 import com.prashant.backgroundcallername.Fragments.SMSFragment;
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         stopService(mServiceIntent);
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartService");
-        broadcastIntent.setClass(this, ReStarter.class);
+//        broadcastIntent.setClass(this, ReStarter.class);
         this.sendBroadcast(broadcastIntent);
         super.onDestroy();
     }
