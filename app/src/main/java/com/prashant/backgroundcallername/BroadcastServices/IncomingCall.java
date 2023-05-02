@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundBroadcastService;
 import com.prashant.backgroundcallername.Database.DatabaseHelper;
+import com.prashant.backgroundcallername.LocalData;
 import com.prashant.backgroundcallername.Models.Call_Model;
 
 import java.util.Calendar;
@@ -23,15 +24,15 @@ import java.util.Date;
 
 public class IncomingCall extends BroadcastReceiver {
 
-DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("vishal");
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint({"UnsafeProtectedBroadcastReceiver", "SuspiciousIndentation"})
     @Override
     public void onReceive(Context context, Intent intent) {
+        String deviceID = LocalData.getDeviceID(context);
 
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Users").child(deviceID).child("Call");
 
-        //system restart zalyavr broadcast service auto suru hote...
         if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
         {
             Intent serviceIntent = new Intent(context, BackgroundBroadcastService.class);

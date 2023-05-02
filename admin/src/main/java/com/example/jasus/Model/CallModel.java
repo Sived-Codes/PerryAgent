@@ -1,12 +1,12 @@
-package com.example.jasus;
+package com.example.jasus.Model;
 
-public class Call_jasus {
+public class CallModel {
     String state,incomingnumber,date;
 
-    public Call_jasus() {
+    public CallModel() {
     }
 
-    public Call_jasus(String state, String incomingnumber, String date) {
+    public CallModel(String state, String incomingnumber, String date) {
         this.state = state;
         this.incomingnumber = incomingnumber;
         this.date = date;

