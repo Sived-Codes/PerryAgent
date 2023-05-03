@@ -1,5 +1,7 @@
 package com.prashant.backgroundcallername;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+getdata();
 
 
 
@@ -82,6 +84,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void getdata() {
+
+
+
+            // RequestQueue initialized
+            mRequestQueue = Volley.newRequestQueue(this);
+
+            // String Request initialized
+            mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                    Toast.makeText(getApplicationContext(), "Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i(TAG, "Error :" + error.toString());
+                }
+            });
+
+            mRequestQueue.add(mStringRequest);
+        }
+
+
 
     //Current Service Checker
     private boolean isMyServiceRunning(Class<?> serviceClass) {
