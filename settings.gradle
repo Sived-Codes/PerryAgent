@@ -17,5 +17,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "BackgroundCallerName"
-include ':app'
-include ':admin'
+include ':UserApp'
+include ':AdminApp'

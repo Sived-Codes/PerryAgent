@@ -11,8 +11,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/admin" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/AdminApp" />
+            <option value="$PROJECT_DIR$/UserApp" />
           </set>
         </option>
       </GradleProjectSettings>
