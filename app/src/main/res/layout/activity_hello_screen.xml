@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#23A897"
+    tools:context=".Ui.HelloScreen">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/perry"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:src="@drawable/perry_two"/>
+
+        <TextView
+            android:id="@+id/t1"
+            android:layout_marginStart="35dp"
+            android:layout_below="@+id/perry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello "
+            android:textStyle="bold"
+            android:textSize="60dp"
+            android:textColor="@color/white"/>
+
+        <EditText
+            android:id="@+id/name_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/t1"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:paddingStart="20dp"
+            android:background="@drawable/edit_text_bg"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:hint="Please enter your name !!"
+            android:textColorHint="#232323" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/start_btn"
+            android:backgroundTint="#FF5722"
+            android:layout_below="@id/name_edittext"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:cornerRadius="20dp"
+            android:text="Start now"/>
+
+
+    </RelativeLayout>
+
+</ScrollView>

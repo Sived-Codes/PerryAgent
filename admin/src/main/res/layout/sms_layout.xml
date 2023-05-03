@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_margin="10dp"
+app:cardCornerRadius="11dp"
+android:orientation="vertical">
+
+<LinearLayout
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/sender_num"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#1738F3"
+            android:layout_height="wrap_content"
+            android:text="98766543210"/>
+
+
+        <TextView
+            android:id="@+id/current_time"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:textSize="8sp"
+            android:layout_marginEnd="10dp"
+            android:textStyle="italic"
+            android:layout_height="wrap_content"
+            android:text="98766543210"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/message_t"
+            android:layout_alignParentStart="true"
+            android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content"
+            android:text="Add the following dependencies to get the support of Cardview in the app. dependencies { // …
+First, add Recycler View in the activity_main.xml and name it recycler1 paste the given code …
+Now, let’s create another XML file in the layout directory to store the data from the database …"/>
+
+
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
