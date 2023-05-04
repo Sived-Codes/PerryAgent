@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.prashant.backgroundcallername'
+    namespace 'com.perry.admin'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.prashant.backgroundcallername"
+        applicationId "com.perry.admin"
         minSdk 21
         targetSdk 33
         versionCode 1

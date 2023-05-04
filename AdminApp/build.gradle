@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.jasus'
+    namespace 'com.perry.admin'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.jasus"
+        applicationId "com.perry.admin"
         minSdk 24
         targetSdk 33
         versionCode 1

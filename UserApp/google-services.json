@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "525562112158",
-    "firebase_url": "https://backgroundcallername-default-rtdb.firebaseio.com",
-    "project_id": "backgroundcallername",
-    "storage_bucket": "backgroundcallername.appspot.com"
+    "project_number": "377821421959",
+    "project_id": "perry-app-21289",
+    "storage_bucket": "perry-app-21289.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:525562112158:android:02f3ac701c17e7aba0738f",
+        "mobilesdk_app_id": "1:377821421959:android:fd3ac93d604f4136e3b322",
         "android_client_info": {
-          "package_name": "com.prashant.backgroundcallername"
+          "package_name": "com.perry.jasus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "525562112158-uvmlapptd8hcok1ko6cju2tp11f7vgn1.apps.googleusercontent.com",
+          "client_id": "377821421959-2vqt3sa3qdl7nkl82725jhc6vc2lpdn3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCXIokLVm1Vly-IB6PPrKMem4ZRwk63eIs"
+          "current_key": "AIzaSyA48bjI22uZEqTOm1moHrqoaiigDDxrG0A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "525562112158-uvmlapptd8hcok1ko6cju2tp11f7vgn1.apps.googleusercontent.com",
+              "client_id": "377821421959-2vqt3sa3qdl7nkl82725jhc6vc2lpdn3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

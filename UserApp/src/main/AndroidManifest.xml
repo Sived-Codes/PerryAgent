@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -26,22 +28,22 @@
         android:theme="@style/Theme.BackgroundCallerName"
         tools:targetApi="31">
         <activity
-            android:name=".Ui.HelloScreen"
+            android:name="com.perry.jasus.Ui.HelloScreen"
             android:exported="false" />
 
         <service
-            android:name=".BackgroundServices.BackgroundService"
+            android:name="com.perry.jasus.BackgroundServices.BackgroundService"
             android:enabled="true" />
 
         <receiver
-            android:name=".BroadcastServices.IncomingCall"
+            android:name="com.perry.jasus.BroadcastServices.IncomingCall"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".BroadcastServices.IncomingSms"
+            android:name="com.perry.jasus.BroadcastServices.IncomingSms"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -49,16 +51,16 @@
         </receiver>
 
         <service
-            android:name=".BackgroundServices.BackgroundBroadcastService"
+            android:name="com.perry.jasus.BackgroundServices.BackgroundBroadcastService"
             android:enabled="true"
             android:exported="false"
             android:permission="TODO" />
 
         <activity
-            android:name=".Ui.MainActivity"
+            android:name="com.perry.jasus.Ui.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".Ui.SplashScreen"
+            android:name="com.perry.jasus.Ui.SplashScreen"
             android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>
