@@ -16,6 +16,11 @@ import com.example.jasus.Ui.MainActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.ViewHolder> {
 
@@ -35,10 +40,43 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
-                LocalData.saveDeviceID(v.getContext(), model.getUserDeviceId());
+                LocalData.saveDeviceID(v.getContext(), model.getUserDeviceId(), model.getUserName());
                 v.getContext().startActivity(intent);
             }
         });
+        DatabaseReference callDb = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserDeviceId()).child("Call");
+        DatabaseReference smsDb = FirebaseDatabase.getInstance().getReference().child("Users").child(model.getUserDeviceId()).child("Sms");
+
+        smsDb.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int size = (int) snapshot.getChildrenCount();
+
+                String c = String.valueOf(size);
+                holder.userTotalMsg.setText( c);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        callDb.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int size = (int) snapshot.getChildrenCount();
+
+                String c = String.valueOf(size);
+                holder.userTotalCall.setText(c);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     @NonNull
@@ -50,7 +88,7 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, model, deviceId;
+        TextView name, model, deviceId, userTotalMsg, userTotalCall;
         MaterialCardView user;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,6 +97,8 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
             deviceId=itemView.findViewById(R.id.user_deviceId);
             model=itemView.findViewById(R.id.user_mobile);
             user=itemView.findViewById(R.id.user);
+            userTotalMsg=itemView.findViewById(R.id.userTotalMsg);
+            userTotalCall=itemView.findViewById(R.id.userTotalCall);
 
 
         }

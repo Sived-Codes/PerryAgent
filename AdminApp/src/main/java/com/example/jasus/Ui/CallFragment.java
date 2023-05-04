@@ -37,7 +37,12 @@ public class CallFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerview);
 
+        TextView name = view.findViewById(R.id.user_Name_callF);
+
         String deviceId = LocalData.getDeviceID(getContext());
+        String userName = LocalData.getName(getContext());
+
+        name.setText(userName);
 
         if (!deviceId.isEmpty()){
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(deviceId).child("Call");

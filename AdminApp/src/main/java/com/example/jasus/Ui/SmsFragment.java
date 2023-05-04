@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class SmsFragment extends Fragment {
 
     RecyclerView recyclerView;
@@ -33,8 +35,12 @@ public class SmsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_sms, container, false);
 
         recyclerView = view.findViewById(R.id.sms_recycler);
+        TextView name = view.findViewById(R.id.user_Name_smsF);
 
         String deviceId = LocalData.getDeviceID(getContext());
+        String userName = LocalData.getName(getContext());
+
+        name.setText(userName);
 
         if (!deviceId.isEmpty()){
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(deviceId).child("Sms");
