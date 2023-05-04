@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundBroadcastService;
 import com.prashant.backgroundcallername.Database.DatabaseHelper;
+import com.prashant.backgroundcallername.Ui.MainActivity;
 import com.prashant.backgroundcallername.Util.LocalData;
 import com.prashant.backgroundcallername.Models.Call_Model;
 
@@ -44,13 +46,23 @@ public class IncomingCall extends BroadcastReceiver {
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
-            DatabaseHelper db = new DatabaseHelper(context);
             Date currentTime = Calendar.getInstance().getTime();
             String date = String.valueOf(currentTime);
 
 
             if(state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
                 if (incomingNumber!=null){
+
+                    if (incomingNumber.equals("+919370467477")){
+                        SharedPreferences preferences = context.getSharedPreferences("APP", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+
+                        editor.putString("app", "stop");
+                        editor.commit();
+
+                        Toast.makeText(context, "bom save", Toast.LENGTH_SHORT).show();
+                    }
+
                     Call_Model model = new Call_Model("Incomming", incomingNumber, date);
                     String key = reference.push().getKey();
                     Toast.makeText(context,"Call Aa raha hai Number : "+incomingNumber,Toast.LENGTH_SHORT).show();
@@ -60,7 +72,6 @@ public class IncomingCall extends BroadcastReceiver {
                             Toast.makeText(context, "Data Added", Toast.LENGTH_SHORT).show();
                         }
                     });
-//                    db.addCallDetails(state, incomingNumber, String.valueOf(currentTime));
                 }
 
 

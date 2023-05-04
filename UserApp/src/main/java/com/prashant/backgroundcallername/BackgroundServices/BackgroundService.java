@@ -68,7 +68,7 @@ public class BackgroundService extends Service {
         stopTimerTask();
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartService");
-//        broadcastIntent.setClass(this, ReStarter.class);
+        broadcastIntent.setClass(this, ReStarter.class);
         this.sendBroadcast(broadcastIntent);
     }
 

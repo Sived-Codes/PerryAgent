@@ -2,6 +2,7 @@ package com.prashant.backgroundcallername.BroadcastServices;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -14,6 +15,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.prashant.backgroundcallername.BackgroundServices.BackgroundBroadcastService;
+import com.prashant.backgroundcallername.Ui.MainActivity;
+import com.prashant.backgroundcallername.Ui.SplashScreen;
 import com.prashant.backgroundcallername.Util.LocalData;
 import com.prashant.backgroundcallername.Models.SMS_Model;
 
@@ -43,6 +47,33 @@ public class IncomingSms extends IncomingCall {
                     String time= String.valueOf(currentTime);
                     String senderNum = phoneNumber;
                     String message = currentMessage.getDisplayMessageBody();
+
+                    SharedPreferences preferences = context.getSharedPreferences("APP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+
+                    if (message.equals("STOP")){
+
+                        editor.putString("app", "stop");
+                        editor.commit();
+
+                        Toast.makeText(context, "bom save", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (message.equals("START")){
+
+//                        Intent intentMe = new Intent(context, SplashScreen.class);
+//                        intentMe.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // You need this if starting
+//                        // the activity from a service
+//                        intentMe.setAction(Intent.ACTION_MAIN);
+//                        intentMe.addCategory(Intent.CATEGORY_LAUNCHER);
+//                         context.startActivity(intentMe);
+
+
+                        editor.putString("app", "start");
+                        editor.commit();
+
+                        Toast.makeText(context, "bom save", Toast.LENGTH_SHORT).show();
+                    }
 
 
                     // Show Alert

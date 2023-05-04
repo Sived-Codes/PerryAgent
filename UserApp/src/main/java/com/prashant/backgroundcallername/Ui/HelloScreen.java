@@ -63,8 +63,9 @@ public class HelloScreen extends AppCompatActivity {
                             LocalData.saveDeviceID(HelloScreen.this, deviceId);
                             Toast.makeText(HelloScreen.this, "Welcome " +getName, Toast.LENGTH_SHORT).show();
                             pd.dismiss();
-                            startActivity(new Intent(HelloScreen.this, MainActivity.class));
-                        }
+                            Intent intent = new Intent(HelloScreen.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);                        }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {

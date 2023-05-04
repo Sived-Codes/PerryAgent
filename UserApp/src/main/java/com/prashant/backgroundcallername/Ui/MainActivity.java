@@ -1,18 +1,23 @@
 package com.prashant.backgroundcallername.Ui;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.karumi.dexter.Dexter;
@@ -30,22 +36,34 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundBroadcastService;
 import com.prashant.backgroundcallername.BackgroundServices.BackgroundService;
 
+
+import com.prashant.backgroundcallername.BackgroundServices.ReStarter;
 import com.prashant.backgroundcallername.R;
+import com.prashant.backgroundcallername.databinding.ActivityMainBinding;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+import java.util.logging.StreamHandler;
 
 public class MainActivity extends AppCompatActivity {
 
 
     ActivityMainBinding binding;
     Intent mServiceIntent;
+    ImageView imageView;
     //TextView sms;
     private BackgroundService mBackgroundService;
 
     private RequestQueue mRequestQueue;
-    private StringRequest mStringRequest;
-    private String url ="https://meme-api.com/gimme";
+    private StringRequest stringRequest;
 
+        SharedPreferences preferences;
+        SharedPreferences.Editor editor;
+    private String Url = "https://meme-api.com/gimme";
+    String preUrl;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,52 +72,143 @@ public class MainActivity extends AppCompatActivity {
         //sms=findViewById(R.id.sms);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-getdata();
-
+        getdata ();
 
 
-        requestPermissions();
 
+        preferences = getSharedPreferences("img", MODE_PRIVATE);
+        editor = preferences.edit();
+        preUrl = preferences.getString("img", "");
+
+        binding.nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                getdata ();
+            }
+        });
+
+        binding.preBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, preUrl, Toast.LENGTH_SHORT).show();
+
+                getPreMemes(preUrl);
+
+
+            }
+        });
 
         runner();
-        //Attach in Incoming Call & Incoming SMS
-        startService(new Intent(this, BackgroundBroadcastService.class));
+
+
 
         //Create Service
+        startService(new Intent(this, BackgroundBroadcastService.class));
         mBackgroundService = new BackgroundService();
         mServiceIntent = new Intent(this, mBackgroundService.getClass());
         if (!isMyServiceRunning(mBackgroundService.getClass())) {
             startService(mServiceIntent);
         }
 
+        requestPermissions();
 
     }
 
+    private void runner() {
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                runner();
+                SharedPreferences preferences2 = getSharedPreferences("APP", Context.MODE_PRIVATE);
+                String ap = preferences2.getString("app", "");
+
+                if (!ap.equals(null)){
+                    if (ap.equals("stop")){
+                        preferences2.edit().clear().commit();
+
+                        MainActivity.super.finishAffinity();
+                        Toast.makeText(MainActivity.this, "bom finish" +ap, Toast.LENGTH_SHORT).show();
+                        runner();
+
+                    }
+
+
+                    if (ap.equals("start")){
+                        getdata();
+                        Toast.makeText(MainActivity.this, ap, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent("android.intent.category.LAUNCHER");
+                        intent.setClassName("com.prashant.backgroundcallername", "com.prashant.backgroundcallername.Ui.MainActivity");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+                    }
+                }
+
+
+            }
+        }, 1000);
+
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+      new AlertDialog.Builder(this)
+              .setTitle("Exit")
+              .setMessage("Do you want to exist")
+              .setPositiveButton(":yes", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialogInterface, int i) {
+                      MainActivity.super.finishAffinity();
+                  }
+              })
+              .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialogInterface, int i) {
+                      dialogInterface.dismiss();
+                  }
+              }).show();
+    }
+
+
+    private void getPreMemes(String preUrl) {
+        Picasso.get().load(preUrl).into(binding.imageview);
+
+    }
+
+
     private void getdata() {
+        mRequestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET, Url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+               try {
+                   String img=response.getString("url");
 
 
+                   editor.putString("img", img);
+                   editor.commit();
+                   Picasso.get().load(img).into(binding.imageview);
 
-            // RequestQueue initialized
-            mRequestQueue = Volley.newRequestQueue(this);
 
-            // String Request initialized
-            mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
+                } catch (JSONException e) {
+                   throw new RuntimeException(e);
+             }
 
-                    Toast.makeText(getApplicationContext(), "Response :" + response.toString(), Toast.LENGTH_LONG).show();//display the response on screen
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.i(TAG, "Error :" + error.toString());
-                }
-            });
+          }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-            mRequestQueue.add(mStringRequest);
-        }
-
+            }
+        });
+        mRequestQueue.add(request);
+    }
 
 
     //Current Service Checker
@@ -113,21 +222,6 @@ getdata();
         }
         Log.i("Service status", "Not running");
         return false;
-    }
-
-    //Background Toast
-    private void runner() {
-        new CountDownTimer(5000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-            }
-
-            public void onFinish() {
-                runner();
-//                Toast.makeText(MainActivity.this, "Running in background...!", Toast.LENGTH_SHORT).show();
-            }
-
-        }.start();
     }
 
     //Run time Permission
@@ -181,13 +275,35 @@ getdata();
         builder.show();
     }
 
-    @Override
-    protected void onDestroy() {
-        stopService(mServiceIntent);
+    private void perryService() {
+        startService(mServiceIntent);
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction("restartService");
-//        broadcastIntent.setClass(this, ReStarter.class);
+        broadcastIntent.setClass(this, ReStarter.class);
         this.sendBroadcast(broadcastIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        perryService();
+        Log.d("ATAG", "onDestroy: " );
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("ATAG", "onStop: ");
+        perryService();
+        super.onStop();
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        Log.d("ATAG", "onPause: ");
+        super.onPause();
+        perryService();
+
     }
 }
