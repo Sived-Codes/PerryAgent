@@ -14,14 +14,13 @@ Java Programming Language
 Firebase Realtime Database
 
 #Setup
-To set up and run the project, please follow the instructions below:
-
 Clone the repository to your local machine using the command below:
 
-
 bash
+
 git clone https://github.com<username>/perry-agent.git
 Open the project in Android Studio or any other suitable IDE for mobile app development.
+
 
 Build and run the project.
 
