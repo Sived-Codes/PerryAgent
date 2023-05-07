@@ -17,9 +17,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.perry.jasus.R;
 import com.perry.jasus.Util.LocalData;
 import com.perry.jasus.Models.UserModel;
-import com.perry.admin.R;
 
 public class HelloScreen extends AppCompatActivity {
 

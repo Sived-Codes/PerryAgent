@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.perry.jasus.Models.Call_Model;
-
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -57,23 +55,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
        Data.close();
    }
 
-   public ArrayList<Call_Model>CallDetail(){
-
-        SQLiteDatabase db=this.getReadableDatabase();
-
-       Cursor cursor= db.rawQuery(" SELECT * FROM "+ Table_Name,null);
-
-       ArrayList<Call_Model>List=new ArrayList<>();
-
-       if (cursor.moveToNext()){
-           do{
-               List.add(new Call_Model(cursor.getString(0),cursor.getString(1),cursor.getString(2)));
-           }while (cursor.moveToNext());
-       }
-          cursor.close();
-       return List;
-
-    }
 
 
     @Override

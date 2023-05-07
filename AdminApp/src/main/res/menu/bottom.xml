@@ -4,7 +4,12 @@
 
     <item android:title="Phone"
         android:icon="@drawable/baseline_local_phone_24"
+        android:id="@+id/call_history_me"/>
+
+    <item android:title="Contact"
+        android:icon="@drawable/baseline_contact_phone_24"
         android:id="@+id/contact_me"/>
+
     <item android:title="Message"
         android:icon="@drawable/baseline_message_24"
         android:id="@+id/SMS_me"/>

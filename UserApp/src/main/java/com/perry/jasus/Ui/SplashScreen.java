@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.perry.admin.R;
+import com.perry.jasus.R;
 
 public class SplashScreen extends AppCompatActivity {
 

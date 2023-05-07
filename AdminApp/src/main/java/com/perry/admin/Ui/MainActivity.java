@@ -24,12 +24,17 @@ public class MainActivity extends AppCompatActivity {
 
         binding.bottomNav.setOnItemSelectedListener(item -> {
 
-            if (item.getItemId() == R.id.contact_me) {
+            if (item.getItemId() == R.id.call_history_me) {
 
                 replaceFragment(new CallFragment());
             }
             if (item.getItemId() == R.id.SMS_me) {
                 replaceFragment(new SmsFragment());
+
+            }
+
+            if (item.getItemId() == R.id.contact_me) {
+                replaceFragment(new ContactFragment());
 
             }
 

@@ -3,6 +3,7 @@ package com.perry.jasus.Util;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.perry.jasus.Ui.MainActivity;
 
@@ -18,8 +19,7 @@ public class LocalData {
 
     }
 
-    public static String  getDeviceID (Context context){
-        preferences = context.getSharedPreferences("users", Context.MODE_PRIVATE);
+    public static String  getDeviceID (){
         String deviceID = preferences.getString("deviceId", "");
         return deviceID;
     }
@@ -28,7 +28,9 @@ public class LocalData {
         preferences = context.getSharedPreferences("users", Context.MODE_PRIVATE);
 
         if (preferences.contains("deviceId")){
-            context.startActivity(new Intent(context, MainActivity.class));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                context.startActivity(new Intent(context, MainActivity.class));
+            }
         }
 
     }

